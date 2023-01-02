@@ -5,24 +5,29 @@ Astro-Nav is a fully responsive headless navigation bar for Astro. It supports m
 ## Installation
 
 ```
-npm install astro-nav
+npm install astro-navbar
 # or
-pnpm add astro-nav
+pnpm add astro-navbar
 ```
 
 ## Basic Usage
 
 ```html
 ---
-import { Astronav, MenuItems, MenuIcon,  Dropdown, DropdownItems } from "astro-nav";
+import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems } from "astro-navbar";
 ---
 
-<header>
+<div>
   <Astronav>
     <div class="flex justify-between">
       <a>Your Logo</a>
       <MenuIcon class="w-4 h-4 text-gray-800" />
     </div>
+    <!--
+    // add `hidden` class by default for mobile
+    // `lg:flex` is to make it visible in desktop
+    // You may use custom CSS instead.
+    -->
     <MenuItems class="hidden lg:flex">
       <ul>
         <li>Home</li>
@@ -31,6 +36,7 @@ import { Astronav, MenuItems, MenuIcon,  Dropdown, DropdownItems } from "astro-n
           <Dropdown class="group">
             <button>
               <span> Services </span>
+              <!-- You can style when dropdown is `open` -->
               <svg class="group-open:rotate-180">...arrow..</svg>
             </button>
             <DropdownItems>
@@ -47,7 +53,7 @@ import { Astronav, MenuItems, MenuIcon,  Dropdown, DropdownItems } from "astro-n
       </ul>
     </MenuItems>
   </Astronav>
-</header>
+</div>
 ```
 
 ### Notes

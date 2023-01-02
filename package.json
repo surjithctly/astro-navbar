@@ -1,10 +1,18 @@
 {
   "name": "astro-navbar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Responsive Mobile Navigation with Dropdown in Astro",
   "type": "module",
   "exports": {
     ".": "./index.ts"
+  },
+  "homepage": "https://github.com/surjithctly/astro-navbar#readme",
+  "bugs": {
+    "url": "https://github.com/surjithctly/astro-navbar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/surjithctly/astro-navbar.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
