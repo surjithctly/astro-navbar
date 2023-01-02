@@ -1,6 +1,6 @@
 {
   "name": "astro-navbar",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Responsive Mobile Navigation with Dropdown in Astro",
   "type": "module",
   "exports": {
