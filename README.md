@@ -1,6 +1,6 @@
 # Astro Headless Navigation Bar
 
-Astro-Nav is a fully responsive headless navigation bar for Astro. It supports mobile responsive toggle and dropdowns.
+Astro-Navbar is a fully responsive headless navigation bar for Astro. It supports mobile responsive toggle and dropdowns.
 
 [**Live Demo on Stackblitz→**](https://stackblitz.com/edit/github-jpfnv9?file=src/pages/index.astro)
 
