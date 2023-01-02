@@ -1,0 +1,56 @@
+<Fragment><slot /></Fragment>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // mobile nav toggle
+    const menuButton = document.getElementById("astronav-menu");
+    menuButton.addEventListener("click", () => {
+      [...document.querySelectorAll(".astronav-toggle")].forEach((el) => {
+        el.classList.toggle("hidden");
+      });
+    });
+
+    // dropdown menus
+    const dropdownMenus = document.querySelectorAll(".astronav-dropdown");
+    dropdownMenus.forEach((menu) => {
+      const button = menu.querySelector("button");
+      button.addEventListener("click", (event) => {
+        // add .open to style with pure css
+        menu.classList.toggle("open");
+        // add accessibility
+        menu.setAttribute(
+          "aria-expanded",
+          menu.getAttribute("aria-expanded") === "true" ? "false" : "true"
+        );
+        // add open attribute to style with tailwindcss
+        if (menu.hasAttribute("open")) {
+          menu.removeAttribute("open");
+        } else {
+          menu.setAttribute("open", "");
+        }
+        button.nextElementSibling.classList.toggle("hidden");
+        // Close one dropdown when selecting another
+        Array.from(dropdownMenus)
+          .filter((el) => el !== menu)
+          .forEach((d) => {
+            d.classList.remove("open");
+            d.removeAttribute("open");
+            d.setAttribute("aria-expanded", "false");
+            d.querySelector(".dropdown-toggle").classList.add("hidden");
+          });
+        event.stopPropagation();
+      });
+    });
+    // Clicking away from dropdown will remove the dropdown class
+    document.addEventListener("click", () => {
+      dropdownMenus.forEach((d) => {
+        d.classList.remove("open");
+        d.removeAttribute("open");
+        d.setAttribute("aria-expanded", "false");
+      });
+      document
+        .querySelectorAll(".dropdown-toggle")
+        .forEach((d) => d.classList.add("hidden"));
+    });
+  });
+</script>

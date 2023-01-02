@@ -1,0 +1,15 @@
+{
+  "name": "astro-nav",
+  "version": "1.0.0",
+  "description": "Responsive Mobile Navigation with Dropdown in Astro",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["astro", "navigation", "menu", "dropdown", "toggle"],
+  "author": "Surjith S M",
+  "license": "MIT"
+}
