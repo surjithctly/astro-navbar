@@ -1,6 +1,6 @@
 # Astro Headless Navigation Bar
 
-Astro-Navbar is a fully responsive headless navigation bar for Astro. It supports mobile responsive toggle and dropdowns.
+Astro-Navbar is a fully accessible responsive headless navigation bar for Astro. It supports mobile responsive toggle and dropdowns.
 
 [**Live Demo on Stackblitz→**](https://stackblitz.com/edit/github-jpfnv9?file=src/pages/index.astro)
 
@@ -68,9 +68,21 @@ This plugin assumes you have a `.hidden` class in the CSS. If not, add the follo
 }
 ```
 
+## Options
+
+Every Component expect `Astronav` supports a `class` attribute which you can style as needed.
+
+`<Dropdown/>` div will add a `aria-expanded` attribute for Accessibility as well as an `open` class & an attribute with name `open`. Here's how it will look like when a dropdown is shown.
+
+```html
+<div class="... open" aria-expanded="true" open></div>
+```
+
+So you can style based on both class or the `open` attribute (works well with tailwind css `group-open`).
+
 ## Tailwind CSS
 
-This plugin will work well with Tailwind CSS.
+This plugin should work well with regular CSS as well as Tailwind CSS. You can add `group` classes to modify dropdown based on the `open` attribute.
 
 <details>
 <summary>Minimal Usage Example with Tailwind CSS</summary>
