@@ -1,6 +1,6 @@
 {
   "name": "astro-navbar",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Responsive Mobile Navigation with Dropdown in Astro",
   "type": "module",
   "exports": {
@@ -17,7 +17,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["astro", "navigation", "menu", "dropdown", "toggle"],
+  "keywords": ["astro", "astro-component", "navigation", "menu", "dropdown", "toggle"],
   "author": "Surjith S M",
   "license": "MIT"
 }
