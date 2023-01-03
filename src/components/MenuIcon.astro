@@ -1,11 +1,12 @@
 ---
 interface Props {
-    class?: string;
+  class?: string;
 }
 const { class: className } = Astro.props;
 ---
 
 <button id="astronav-menu">
+  <slot>
     <svg
       fill="currentColor"
       class:list={[className]}
@@ -26,4 +27,5 @@ const { class: className } = Astro.props;
         d="M4 5h16a1 1 0 010 2H4a1 1 0 110-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2z"
       ></path>
     </svg>
-  </button>
+  </slot>
+</button>
