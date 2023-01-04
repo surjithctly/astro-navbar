@@ -1,4 +1,4 @@
-export { default as Astronav } from "./src/Navbar.astro";
+export { default as Astronav } from "./src/Astronav.astro";
 export { default as MenuIcon } from "./src/components/MenuIcon.astro";
 export { default as OpenIcon } from "./src/components/OpenIcon.astro";
 export { default as CloseIcon } from "./src/components/CloseIcon.astro";

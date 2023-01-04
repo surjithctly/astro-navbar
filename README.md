@@ -70,7 +70,7 @@ This plugin assumes you have a `.hidden` class in the CSS. If not, add the follo
 }
 ```
 
-## Options
+## Customizations
 
 Every Component expect `Astronav` supports a `class` attribute which you can style as needed.
 
@@ -81,6 +81,29 @@ Every Component expect `Astronav` supports a `class` attribute which you can sty
 ```
 
 So you can style based on both class or the `open` attribute (works well with tailwind css `group-open`).
+
+### Custom Icons for Menu
+
+To add custom icons for menu, you can use `OpenIcon` and `CloseIcon` inside `MenuIcon`. Here's an example. You can also pass custom icon components like `astro-icon` here.
+
+```jsx
+---
+import { Astronav, MenuIcon, OpenIcon, CloseIcon } from "astro-navbar";
+---
+
+ <Astronav>
+  ...
+  <MenuIcon>
+    <OpenIcon>
+      <svg>...</svg>
+    </OpenIcon>
+    <CloseIcon>
+      <svg>...</svg>
+    </CloseIcon>
+  </MenuIcon>
+  ...
+  </Astronav>
+```
 
 ## Tailwind CSS
 
