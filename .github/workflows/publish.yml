@@ -13,8 +13,6 @@ jobs:
         with:
           node-version: "16.x"
           registry-url: "https://registry.npmjs.org"
-      - name: Install dependencies and build 🔧
-        run: npm ci
       - name: Publish package on NPM 📦
         run: npm publish
         env:
