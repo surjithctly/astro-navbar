@@ -165,6 +165,23 @@ import { Astronav, MenuItems, MenuIcon,  Dropdown, DropdownItems } from "astro-n
 
 </details>
 
+## Close Menu on Click
+
+Use the following code if you want to close the mobile menu on click. Useful for cases like the links are in same page. 
+
+```js
+// Close menu on clicking a menu item
+
+const menuItems = document.querySelectorAll(".astronav-toggle a");
+menuItems.forEach((item) => {
+    item.addEventListener("click", () => {
+        [...document.querySelectorAll(".astronav-toggle")].forEach((el) => {
+            el.classList.toggle("hidden");
+        });
+    });
+});
+```
+
 ## Contribute
 
 Please create an issue.
