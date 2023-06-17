@@ -5,7 +5,7 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<button id="astronav-menu">
+<button id="astronav-menu" aria-label="Toggle Menu">
   <slot>
     <svg
       fill="currentColor"
@@ -14,7 +14,7 @@ const { class: className } = Astro.props;
       height="24"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg">
-      <title>Menu</title>
+      <title>Toggle Menu</title>
       <path
         class="astronav-toggle hidden"
         fill-rule="evenodd"

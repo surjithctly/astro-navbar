@@ -4,7 +4,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     // mobile nav toggle
     const menuButton = document.getElementById("astronav-menu");
-    menuButton.addEventListener("click", () => {
+    menuButton?.addEventListener("click", () => {
       [...document.querySelectorAll(".astronav-toggle")].forEach((el) => {
         el.classList.toggle("hidden");
       });
@@ -14,7 +14,7 @@
     const dropdownMenus = document.querySelectorAll(".astronav-dropdown");
     dropdownMenus.forEach((menu) => {
       const button = menu.querySelector("button");
-      button.addEventListener("click", (event) => {
+      button?.addEventListener("click", (event) => {
         // add .open to style with pure css
         menu.classList.toggle("open");
         // add accessibility
@@ -28,7 +28,7 @@
         } else {
           menu.setAttribute("open", "");
         }
-        button.nextElementSibling.classList.toggle("hidden");
+        button?.nextElementSibling?.classList.toggle("hidden");
         // Close one dropdown when selecting another
         Array.from(dropdownMenus)
           .filter((el) => el !== menu)
@@ -36,7 +36,7 @@
             d.classList.remove("open");
             d.removeAttribute("open");
             d.setAttribute("aria-expanded", "false");
-            d.querySelector(".dropdown-toggle").classList.add("hidden");
+            d.querySelector(".dropdown-toggle")?.classList.add("hidden");
           });
         event.stopPropagation();
       });
