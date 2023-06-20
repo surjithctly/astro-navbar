@@ -28,7 +28,10 @@
         } else {
           menu.setAttribute("open", "");
         }
-        button?.nextElementSibling?.classList.toggle("hidden");
+        // Toggle Dropdown Content
+        const dropdownToggle = button?.querySelector(".dropdown-toggle");
+        dropdownToggle?.classList.toggle("hidden");
+
         // Close one dropdown when selecting another
         Array.from(dropdownMenus)
           .filter((el) => el !== menu)
