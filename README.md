@@ -1,6 +1,6 @@
 # Astro Headless Navigation Bar
 
-Astro-Navbar is a fully accessible responsive headless navigation bar for Astro. It supports mobile responsive toggle and dropdowns.
+Astro-Navbar is a fully accessible responsive headless navigation bar for Astro. It supports mobile responsive toggle and nested dropdowns.
 
 [**Live Demo on Stackblitz →**](https://stackblitz.com/edit/github-jpfnv9?file=src/pages/index.astro)
 
@@ -18,7 +18,7 @@ pnpm add astro-navbar
 
 ```html
 ---
-import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems } from "astro-navbar";
+import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems, DropdownSubmenu } from "astro-navbar";
 ---
 
 <div>
@@ -48,7 +48,17 @@ import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems } from "astro-na
                 <ul>
                   <li>Menu 1</li>
                   <li>Menu 2</li>
-                  <li>Menu 3</li>
+                  <li>
+                    <DropdownSubmenu>
+                      <button>Submenu</button>
+                      <DropdownItems>
+                        <ul>
+                          <li>Sub Menu 1</li>
+                          <li>Sub Menu 2</li>
+                        </ul>
+                      </DropdownItems>
+                    </DropdownSubmenu>
+                  </li>
                 </ul>
               </div>
             </DropdownItems>
@@ -165,21 +175,18 @@ import { Astronav, MenuItems, MenuIcon,  Dropdown, DropdownItems } from "astro-n
 
 </details>
 
-## Close Menu on Click
+## Options
 
-Use the following code if you want to close the mobile menu on click. Useful for cases like the links are in same page. 
+Here are the supported options / props for this plugin.
+
+### Close Menu on Click
+
+You can add the `closeOnClick` props to the `Astronav` component if you want to close the menu on clicking the item. This is useful on mobile where you have links to the same page like `#about` and want to close menu after click.
 
 ```js
-// Close menu on clicking a menu item
+// Close whole menu on clicking a menu item inside (on mobile)
 
-const menuItems = document.querySelectorAll(".astronav-toggle a");
-menuItems.forEach((item) => {
-    item.addEventListener("click", () => {
-        [...document.querySelectorAll(".astronav-toggle")].forEach((el) => {
-            el.classList.toggle("hidden");
-        });
-    });
-});
+<Astronav closeOnClick>...</Astronav>
 ```
 
 ## Contribute

@@ -5,4 +5,6 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<span class:list={["astronav-toggle hidden", className]}><slot /></span>
+<span class:list={["astronav-close-icon astronav-toggle hidden", className]}
+  ><slot /></span
+>
