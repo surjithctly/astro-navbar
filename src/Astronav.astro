@@ -88,7 +88,6 @@ function closeAllDropdowns(event) {
   ].some((button) => button.contains(event.target));
   if (!isButtonInsideDropdown) {
     dropdownMenus.forEach((d) => {
-      console.log("I ran", d);
       // if (!d.contains(event.target)) {
       d.classList.remove("open");
       d.removeAttribute("open");
