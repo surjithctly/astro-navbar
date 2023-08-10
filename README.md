@@ -1,14 +1,14 @@
-# Astro Headless Navigation Bar
+# Astro-Navbar
 
-Astro-Navbar is a fully accessible responsive headless navigation bar for Astro. It supports mobile responsive toggle and nested dropdowns.
+Astro-Navbar is a fully responsive and accessible headless navigation bar for Astro, supporting nested dropdowns and mobile-responsive toggles.
 
-[**Live Demo on Stackblitz →**](https://stackblitz.com/edit/github-jpfnv9?file=src/pages/index.astro)
-
-[**Live Demo on Astroship Template →**](https://astroship.web3templates.com/)
+### Live Demos
+- [**Stackblitz**](https://stackblitz.com/edit/github-jpfnv9?file=src/pages/index.astro)
+- [**Astroship Template**](https://astroship.web3templates.com/)
 
 ## Installation
 
-```
+```bash
 npm install astro-navbar
 # or
 pnpm add astro-navbar
@@ -16,7 +16,16 @@ pnpm add astro-navbar
 
 ## Basic Usage
 
-```html
+Ensure you have the `.hidden` class in your CSS. If not, add the following:
+
+```css
+.hidden {
+  display: none;
+}
+```
+Then integrate the navigation bar:
+
+```astro
 ---
 import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems, DropdownSubmenu } from "astro-navbar";
 ---
@@ -27,11 +36,6 @@ import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems, DropdownSubmenu
       <a>Your Logo</a>
       <MenuIcon class="w-4 h-4 text-gray-800" />
     </div>
-    <!--
-    // add `hidden` class by default for mobile
-    // `lg:flex` is to make it visible in desktop
-    // You may use custom CSS instead.
-    -->
     <MenuItems class="hidden lg:flex">
       <ul>
         <li>Home</li>
@@ -69,28 +73,34 @@ import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems, DropdownSubmenu
   </Astronav>
 </div>
 ```
+## Customization
 
-### Notes
+### Styling
 
-This plugin assumes you have a `.hidden` class in the CSS. If not, add the following to your CSS
+Every component, except `Astronav`, supports the `class` attribute for custom styling. The `<Dropdown/>` component will have an `aria-expanded` attribute for accessibility and an `open` class & attribute when shown. This can be styled with CSS or utilities like Tailwind CSS's `group-open`.
 
-```css
-.hidden {
-  display: none;
-}
+### Custom Icons
+
+To use custom icons:
+
+```astro
+---
+import { Astronav, MenuIcon, OpenIcon, CloseIcon } from "astro-navbar";
+---
+
+<Astronav>
+  ...
+  <MenuIcon>
+    <OpenIcon>
+      <svg>...</svg>
+    </OpenIcon>
+    <CloseIcon>
+      <svg>...</svg>
+    </CloseIcon>
+  </MenuIcon>
+  ...
+</Astronav>
 ```
-
-## Customizations
-
-Every Component expect `Astronav` supports a `class` attribute which you can style as needed.
-
-`<Dropdown/>` div will add a `aria-expanded` attribute for Accessibility as well as an `open` class & an attribute with name `open`. Here's how it will look like when a dropdown is shown.
-
-```html
-<div class="... open" aria-expanded="true" open></div>
-```
-
-So you can style based on both class or the `open` attribute (works well with tailwind css `group-open`).
 
 ### Custom Icons for Menu
 
@@ -115,14 +125,14 @@ import { Astronav, MenuIcon, OpenIcon, CloseIcon } from "astro-navbar";
   </Astronav>
 ```
 
-## Tailwind CSS
+## Using with Tailwind CSS
 
-This plugin should work well with regular CSS as well as Tailwind CSS. You can add `group` classes to modify dropdown based on the `open` attribute.
+Astro-Navbar pairs well with Tailwind CSS. 
 
 <details>
 <summary>Minimal Usage Example with Tailwind CSS</summary>
 
-```html
+```astro
 ---
 import { Astronav, MenuItems, MenuIcon,  Dropdown, DropdownItems } from "astro-navbar";
 ---
