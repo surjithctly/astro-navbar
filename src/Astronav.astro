@@ -8,7 +8,7 @@ const { closeOnClick = false } = Astro.props;
 <slot />
 
 <script define:vars={{ closeOnClick }}>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("astro:page-load", () => {
   // Mobile nav toggle
   const menuButton = document.getElementById("astronav-menu");
   menuButton && menuButton.addEventListener("click", toggleMobileNav);
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (closeOnClick) {
     handleCloseOnClick();
   }
-});
+}, { once: true });
 
 function toggleMobileNav() {
   [...document.querySelectorAll(".astronav-toggle")].forEach((el) => {
