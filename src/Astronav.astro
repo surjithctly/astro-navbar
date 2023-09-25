@@ -8,7 +8,28 @@ const { closeOnClick = false } = Astro.props;
 <slot />
 
 <script define:vars={{ closeOnClick }}>
-document.addEventListener("DOMContentLoaded", () => {
+["DOMContentLoaded", "astro:after-swap"].forEach((event) => {
+  document.addEventListener(event, addListeners);
+});
+
+// Function to clone and replace elements
+function cloneAndReplace(element) {
+  const clone = element.cloneNode(true);
+  element.parentNode.replaceChild(clone, element);
+}
+
+function addListeners() {
+  // Clean up existing listeners
+  const oldMenuButton = document.getElementById("astronav-menu");
+  if (oldMenuButton) {
+    cloneAndReplace(oldMenuButton);
+  }
+
+  const oldDropdownMenus = document.querySelectorAll(".astronav-dropdown");
+  oldDropdownMenus.forEach((menu) => {
+    cloneAndReplace(menu);
+  });
+
   // Mobile nav toggle
   const menuButton = document.getElementById("astronav-menu");
   menuButton && menuButton.addEventListener("click", toggleMobileNav);
@@ -32,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
       submenuButton &&
         submenuButton.addEventListener("click", (event) => {
           event.stopImmediatePropagation();
-          console.log("click");
           toggleSubmenuDropdown(event, submenu);
         });
     });
@@ -44,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (closeOnClick) {
     handleCloseOnClick();
   }
-});
+}
 
 function toggleMobileNav() {
   [...document.querySelectorAll(".astronav-toggle")].forEach((el) => {
@@ -88,6 +108,7 @@ function closeAllDropdowns(event) {
   ].some((button) => button.contains(event.target));
   if (!isButtonInsideDropdown) {
     dropdownMenus.forEach((d) => {
+      // console.log("I ran", d);
       // if (!d.contains(event.target)) {
       d.classList.remove("open");
       d.removeAttribute("open");
@@ -120,7 +141,7 @@ function toggleMenu(menu) {
 }
 
 function closeMenu(menu) {
-  console.log("closing", menu);
+  // console.log("closing", menu);
   menu.classList.remove("open");
   menu.removeAttribute("open");
   menu.setAttribute("aria-expanded", "false");
@@ -147,5 +168,5 @@ function handleCloseOnClick() {
         });
       });
     });
-  }
+}
 </script>

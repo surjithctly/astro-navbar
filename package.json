@@ -1,6 +1,6 @@
 {
   "name": "astro-navbar",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Responsive Mobile Navigation with Dropdown in Astro",
   "type": "module",
   "exports": "./index.ts",
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@astrojs/tailwind": "^4.0.0",
-    "astro": "latest",
+    "astro": "^3.1.2",
     "tailwindcss": "^3.3.2"
   },
   "keywords": [
