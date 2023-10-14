@@ -3,6 +3,7 @@
 Astro-Navbar is a fully responsive and accessible headless navigation bar for Astro, supporting nested dropdowns and mobile-responsive toggles.
 
 ### Live Demos
+
 - [**Stackblitz**](https://stackblitz.com/edit/github-jpfnv9?file=src/pages/index.astro)
 - [**Astroship Template**](https://astroship.web3templates.com/)
 
@@ -23,6 +24,7 @@ Ensure you have the `.hidden` class in your CSS. If not, add the following:
   display: none;
 }
 ```
+
 Then integrate the navigation bar:
 
 ```astro
@@ -73,6 +75,7 @@ import { Astronav, MenuItems, MenuIcon, Dropdown, DropdownItems, DropdownSubmenu
   </Astronav>
 </div>
 ```
+
 ## Customization
 
 ### Styling
@@ -127,7 +130,7 @@ import { Astronav, MenuIcon, OpenIcon, CloseIcon } from "astro-navbar";
 
 ## Using with Tailwind CSS
 
-Astro-Navbar pairs well with Tailwind CSS. 
+Astro-Navbar pairs well with Tailwind CSS.
 
 <details>
 <summary>Minimal Usage Example with Tailwind CSS</summary>
@@ -184,6 +187,35 @@ import { Astronav, MenuItems, MenuIcon,  Dropdown, DropdownItems } from "astro-n
 ```
 
 </details>
+
+## Utilities
+
+Some related utilities are provided for convenience.
+
+### Sticky Header
+
+To make the header sticky, you can use the `<StickyHeader />` component. This will help you to add custom classes to the header when scrolled such as `sticky`. Since this is a headless component, no sticky classes has been added by default. You can add your own classes. This utility adds a tiny JS snippet to detect scroll position in a performant way.
+
+Here's an example:
+
+```js
+// Wrap the header with sticky header (renders as <header>...</header>)
+
+<StickyHeader
+  // default class. applied all the time. No changes
+  class="sticky top-0 border-b z-20 transition-all"
+  // scroll threshold to enable active class
+  scrollY={50}
+  // initial classes which will be removed when scrollY reached
+  defaultClass="py-5 border-transparent"
+  // active classes to add when scrollY reached.
+  //  "is-active" class will be added by default
+  activeClass="py-2 bg-white/80 border-gray-200 backdrop-blur-lg">
+  // ...
+  <Astronav>...</Astronav>
+  // ...
+</StickyHeader>
+```
 
 ## Options
 
