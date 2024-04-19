@@ -10,10 +10,11 @@ const {
   defaultClass = "",
   activeClass = "",
   class: className = "",
+  ...rest
 } = Astro.props;
 ---
 
-<header class:list={["astronav-sticky-header", className, defaultClass]}>
+<header class:list={["astronav-sticky-header", className, defaultClass]} {...rest}>
   <slot />
 </header>
 
