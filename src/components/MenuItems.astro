@@ -2,9 +2,9 @@
 interface Props {
     class?: string;
 }
-const { class: className } = Astro.props;
+const { class: className, ...rest } = Astro.props;
 ---
 
-<nav class:list={["astronav-items astronav-toggle", className]}>
+<nav class:list={["astronav-items astronav-toggle", className]} {...rest}>
     <slot />
 </nav>
