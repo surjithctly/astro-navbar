@@ -6,9 +6,15 @@ import {
   Dropdown,
   DropdownItems,
   DropdownSubmenu,
+  StickyHeader
 } from "astro-navbar";
 ---
 
+<StickyHeader
+  class="sticky top-0 border-b z-20 transition-all"
+  scrollY={40}
+  defaultClass="py-5 border-transparent"
+  activeClass="py-2 bg-white/80 border-gray-200 backdrop-blur-lg">
 <header class="lg:flex justify-between p-5 gap-5 mx-auto container">
   <Astronav closeOnClick>
     <div class="flex w-full lg:w-auto justify-between">
@@ -217,3 +223,4 @@ import {
     </MenuItems>
   </Astronav>
 </header>
+</StickyHeader>

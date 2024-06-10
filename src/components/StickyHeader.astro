@@ -34,7 +34,7 @@ function OnScroll(scrollPos) {
       header.setAttribute("active", "");
     }
     //reduce the scrollY to avoid flickering when scrolling up
-    if (scrollPos < Math.max(scrollY - 20, 0)) {
+    if (scrollPos < Math.max(scrollY - 40, 10)) {
       header.classList.remove("is-active", ...classArray);
       header.classList.add(...replaceArray);
       header.removeAttribute("active");
