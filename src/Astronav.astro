@@ -103,7 +103,9 @@ function closeAllDropdowns(event) {
   );
   const isButtonInsideDropdown = [
     ...document.querySelectorAll(
-      ".astronav-dropdown button, .astronav-dropdown-submenu button, #astronav-menu"
+      `.astronav-dropdown button, .astronav-dropdown label, .astronav-dropdown input,
+	  .astronav-dropdown-submenu button, .astronav-dropdown-submenu label, .astronav-dropdown-submenu input,
+	  #astronav-menu`
     ),
   ].some((button) => button.contains(event.target));
   if (!isButtonInsideDropdown) {
