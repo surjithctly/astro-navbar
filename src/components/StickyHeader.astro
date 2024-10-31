@@ -32,14 +32,11 @@ const {
   const removeScrollY = Math.max(scrollY - 50, 50); // Scroll position to remove active class
 
   function updateAnimation(scrollPos) {
-    console.log("running", scrollPos, addScrollY, removeScrollY);
     if (scrollPos > addScrollY) {
-      console.log("addScrollY", addScrollY);
       header.classList.remove(...defaultClass.split(" "));
       header.classList.add("is-active", ...activeClass.split(" "));
       header.setAttribute("active", "");
     } else if (scrollPos < removeScrollY) {
-      console.log("removeScrollY", removeScrollY);
       header.classList.remove("is-active", ...activeClass.split(" "));
       header.classList.add(...defaultClass.split(" "));
       header.removeAttribute("active");
@@ -51,7 +48,6 @@ const {
     if (!ticking) {
       window.requestAnimationFrame(function () {
         updateAnimation(lastKnownScrollPosition);
-        console.log(lastKnownScrollPosition);
         ticking = false;
       });
 
