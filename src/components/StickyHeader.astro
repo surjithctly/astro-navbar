@@ -20,7 +20,11 @@ const {
   <slot />
 </header>
 
-<script data-astro-rerun define:vars={{ scrollY, defaultClass, activeClass }}>
+<script
+  is:inline
+  data-astro-rerun
+  define:vars={{ scrollY, defaultClass, activeClass }}
+>
   // @ts-nocheck
   let lastKnownScrollPosition = 0;
   let ticking = false;
