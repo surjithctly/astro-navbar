@@ -32,8 +32,8 @@ const {
   const header = document.querySelector(".astronav-sticky-header");
 
   // Define two different scroll positions
-  const addScrollY = Math.max(scrollY, 100); // Scroll position to add active class
-  const removeScrollY = Math.max(scrollY - 50, 50); // Scroll position to remove active class
+  const addScrollY = Math.max(scrollY, 50); // Scroll position to add active class
+  const removeScrollY = Math.max(scrollY - 50, 10); // Scroll position to remove active class
 
   function updateAnimation(scrollPos) {
     if (scrollPos > addScrollY) {
