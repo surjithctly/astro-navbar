@@ -8,9 +8,16 @@ const { closeOnClick = false } = Astro.props;
 <slot />
 
 <script define:vars={{ closeOnClick }}>
-["DOMContentLoaded", "astro:after-swap"].forEach((event) => {
-  document.addEventListener(event, addListeners);
-});
+document.addEventListener("DOMContentLoaded", addListeners);
+document.addEventListener("astro:after-swap", addListeners);
+document.addEventListener(
+  "astro:before-swap",
+  () => {
+    document.removeEventListener("astro:after-swap", addListeners);
+    document.removeEventListener("click", closeAllDropdowns);
+  },
+  { once: true }
+);
 
 // Function to clone and replace elements
 function cloneAndReplace(element) {
@@ -59,6 +66,7 @@ function addListeners() {
   });
 
   // Clicking away from dropdown will remove the dropdown class
+  document.removeEventListener("click", closeAllDropdowns);
   document.addEventListener("click", closeAllDropdowns);
 
   if (closeOnClick) {
@@ -159,15 +167,16 @@ function handleCloseOnClick() {
   const navToggle = document.getElementById("astronav-menu");
   const navLink = navMenuItems && navMenuItems.querySelectorAll("a");
 
-  const MenuIcons = navToggle.querySelectorAll(".astronav-toggle");
+  const MenuIcons = navToggle && navToggle.querySelectorAll(".astronav-toggle");
 
   navLink &&
     navLink.forEach((item) => {
       item.addEventListener("click", () => {
         navMenuItems?.classList.add("hidden");
-        MenuIcons.forEach((el) => {
-          el.classList.toggle("hidden");
-        });
+        MenuIcons &&
+          MenuIcons.forEach((el) => {
+            el.classList.toggle("hidden");
+          });
       });
     });
 }
