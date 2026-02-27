@@ -38,10 +38,12 @@ function addListeners() {
   const dropdownMenus = document.querySelectorAll(".astronav-dropdown");
   dropdownMenus.forEach((menu) => {
     const button = menu.querySelector("button");
-    button &&
+    if (button) {
+      button.setAttribute("aria-expanded", "false");
       button.addEventListener("click", (event) =>
         toggleDropdownMenu(event, menu, dropdownMenus)
       );
+    }
 
     // Handle Submenu Dropdowns
     const dropDownSubmenus = menu.querySelectorAll(
@@ -50,19 +52,120 @@ function addListeners() {
 
     dropDownSubmenus.forEach((submenu) => {
       const submenuButton = submenu.querySelector("button");
-      submenuButton &&
+      if (submenuButton) {
+        submenuButton.setAttribute("aria-expanded", "false");
         submenuButton.addEventListener("click", (event) => {
           event.stopImmediatePropagation();
           toggleSubmenuDropdown(event, submenu);
         });
+      }
     });
   });
 
   // Clicking away from dropdown will remove the dropdown class
   document.addEventListener("click", closeAllDropdowns);
 
+  document.removeEventListener("keydown", handleKeydown);
+  document.addEventListener("keydown", handleKeydown);
+
   if (closeOnClick) {
     handleCloseOnClick();
+  }
+}
+
+function handleKeydown(event) {
+  const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  const activeElement = document.activeElement;
+
+  if (event.key === "Escape") {
+    const openMenu =
+      activeElement.closest(".astronav-dropdown-submenu.open") ||
+      activeElement.closest(".astronav-dropdown.open");
+
+    if (openMenu) {
+      if (openMenu.classList.contains("astronav-dropdown-submenu")) {
+        toggleSubmenuDropdown(event, openMenu);
+      } else {
+        const dropdownMenus = document.querySelectorAll(".astronav-dropdown");
+        toggleDropdownMenu(event, openMenu, dropdownMenus);
+      }
+
+      const triggerButton = openMenu.querySelector("button");
+      triggerButton?.focus();
+      event.stopPropagation();
+    }
+    return;
+  }
+
+  // Handle Navigation within an open menu
+  const currentMenuContent = activeElement.closest('.dropdown-toggle');
+  
+  if (currentMenuContent && !currentMenuContent.classList.contains('hidden')) {
+      const items = Array.from(currentMenuContent.querySelectorAll(focusableElements));
+      const index = items.indexOf(activeElement);
+
+      if (event.key === "ArrowDown") {
+          event.preventDefault();
+          const next = (index + 1) % items.length;
+          items[next].focus();
+      } else if (event.key === "ArrowUp") {
+          event.preventDefault();
+          const prev = (index - 1 + items.length) % items.length;
+          items[prev].focus();
+      } else if (event.key === "Home") {
+          event.preventDefault();
+          items[0].focus();
+      } else if (event.key === "End") {
+          event.preventDefault();
+          items[items.length - 1].focus();
+      } else if (event.key === "ArrowLeft") {
+          const submenu = currentMenuContent.closest('.astronav-dropdown-submenu');
+          if (submenu) {
+              event.preventDefault();
+              event.stopPropagation();
+              toggleSubmenuDropdown(event, submenu);
+              const trigger = submenu.querySelector('button');
+              trigger?.focus();
+          }
+      } else if (event.key === "ArrowRight") {
+          if (activeElement.matches('.astronav-dropdown-submenu button')) {
+               event.preventDefault();
+               event.stopPropagation();
+               const submenu = activeElement.closest('.astronav-dropdown-submenu');
+               if (!submenu.hasAttribute('open')) {
+                   toggleSubmenuDropdown(event, submenu);
+               }
+               const content = submenu.querySelector('.dropdown-toggle');
+               const first = content.querySelector(focusableElements);
+               first?.focus();
+          }
+      }
+      return;
+  }
+
+  // Handle Top Level Triggers
+  const isDropdownButton = activeElement.matches(".astronav-dropdown > button");
+  const isSubmenuButton = activeElement.matches(".astronav-dropdown-submenu > button"); 
+
+  if (isDropdownButton || isSubmenuButton) {
+      if (event.key === "Enter" || event.key === "ArrowDown" || event.key === "Space" || (event.key === "ArrowRight" && isDropdownButton)) {
+          event.preventDefault();
+          const menu = activeElement.closest('.astronav-dropdown') || activeElement.closest('.astronav-dropdown-submenu');
+          
+          if (menu) {
+             const isOpen = menu.hasAttribute('open');
+             if (!isOpen) {
+                 if (menu.classList.contains('astronav-dropdown-submenu')) {
+                     toggleSubmenuDropdown(event, menu);
+                 } else {
+                     toggleDropdownMenu(event, menu, document.querySelectorAll(".astronav-dropdown"));
+                 }
+             }
+             const content = menu.querySelector('.dropdown-toggle');
+             const first = content.querySelector(focusableElements);
+             first?.focus();
+          }
+      }
   }
 }
 
@@ -110,48 +213,46 @@ function closeAllDropdowns(event) {
   ].some((button) => button.contains(event.target));
   if (!isButtonInsideDropdown) {
     dropdownMenus.forEach((d) => {
-      // console.log("I ran", d);
-      // if (!d.contains(event.target)) {
-      d.classList.remove("open");
-      d.removeAttribute("open");
       d.classList.add("hidden");
-      // }
     });
     dropdownParent.forEach((d) => {
       d.classList.remove("open");
       d.removeAttribute("open");
-      d.setAttribute("aria-expanded", "false");
+      const button = d.querySelector("button");
+      button?.setAttribute("aria-expanded", "false");
     });
   }
 }
 
 function toggleMenu(menu) {
   menu.classList.toggle("open");
-  const expanded = menu.getAttribute("aria-expanded") === "true";
-  menu.setAttribute("aria-expanded", expanded ? "false" : "true");
-  menu.hasAttribute("open")
-    ? menu.removeAttribute("open")
-    : menu.setAttribute("open", "");
+  const isOpen = menu.hasAttribute("open");
+  if (isOpen) {
+    menu.removeAttribute("open");
+  } else {
+    menu.setAttribute("open", "");
+  }
+
+  const button = menu.querySelector("button");
+  const expanded = button.getAttribute("aria-expanded") === "true";
+  button.setAttribute("aria-expanded", expanded ? "false" : "true");
 
   const dropdownToggle = menu.querySelector(".dropdown-toggle");
-  const dropdownExpanded = dropdownToggle.getAttribute("aria-expanded");
   dropdownToggle.classList.toggle("hidden");
-  dropdownToggle.setAttribute(
-    "aria-expanded",
-    dropdownExpanded === "true" ? "false" : "true"
-  );
 }
 
 function closeMenu(menu) {
-  // console.log("closing", menu);
   menu.classList.remove("open");
   menu.removeAttribute("open");
-  menu.setAttribute("aria-expanded", "false");
-  const dropdownToggles = menu.querySelectorAll(".dropdown-toggle");
-  dropdownToggles.forEach((toggle) => {
-    toggle.classList.add("hidden");
-    toggle.setAttribute("aria-expanded", "false");
-  });
+  const button = menu.querySelector("button");
+  button?.setAttribute("aria-expanded", "false");
+  
+  const dropdownToggle = menu.querySelector(".dropdown-toggle");
+  dropdownToggle?.classList.add("hidden");
+
+  // Close recursive submenus
+  const submenus = menu.querySelectorAll(".astronav-dropdown-submenu");
+  submenus.forEach(closeMenu);
 }
 
 function handleCloseOnClick() {

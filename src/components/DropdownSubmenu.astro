@@ -6,7 +6,6 @@ const { class: className, ...rest } = Astro.props;
 ---
 
 <div
-    class:list={["astronav-dropdown-submenu", className]} {...rest}
-    aria-expanded="false">
+    class:list={["astronav-dropdown-submenu", className]} {...rest}>
     <slot />
 </div>
