@@ -1,174 +1,194 @@
 ---
-interface Props {
-  closeOnClick?: boolean;
-}
-const { closeOnClick = false } = Astro.props;
 ---
+<nav class="astronav-toggle-root">
+  <slot />
+</nav>
 
-<slot />
+<script>
+  ["DOMContentLoaded", "astro:after-swap"].forEach((event) => {
+    document.addEventListener(event, addListeners);
+  });
 
-<script define:vars={{ closeOnClick }}>
-["DOMContentLoaded", "astro:after-swap"].forEach((event) => {
-  document.addEventListener(event, addListeners);
-});
-
-// Function to clone and replace elements
-function cloneAndReplace(element) {
-  const clone = element.cloneNode(true);
-  element.parentNode.replaceChild(clone, element);
-}
-
-function addListeners() {
-  // Clean up existing listeners
-  const oldMenuButton = document.getElementById("astronav-menu");
-  if (oldMenuButton) {
-    cloneAndReplace(oldMenuButton);
+  // Function to clone and replace elements
+  function cloneAndReplace(element) {
+    const clone = element.cloneNode(true);
+    element.parentNode.replaceChild(clone, element);
   }
 
-  const oldDropdownMenus = document.querySelectorAll(".astronav-dropdown");
-  oldDropdownMenus.forEach((menu) => {
-    cloneAndReplace(menu);
-  });
+  function addListeners() {
+    // Iterate over each Astronav instance
+    document.querySelectorAll(".astronav-toggle-root").forEach((root) => {
+      addListenersToRoot(root);
+    });
+  }
 
-  // Mobile nav toggle
-  const menuButton = document.getElementById("astronav-menu");
-  menuButton && menuButton.addEventListener("click", toggleMobileNav);
+  function addListenersToRoot(root) {
+    // Clean up existing listeners by cloning interactive elements
+    const oldMenuButton = root.querySelector("button[data-astronav]");
+    if (oldMenuButton) {
+      cloneAndReplace(oldMenuButton);
+    }
 
-  // Dropdown menus
-  const dropdownMenus = document.querySelectorAll(".astronav-dropdown");
-  dropdownMenus.forEach((menu) => {
-    const button = menu.querySelector("button");
-    button &&
-      button.addEventListener("click", (event) =>
-        toggleDropdownMenu(event, menu, dropdownMenus)
+    const oldDropdownMenus = root.querySelectorAll(".astronav-dropdown");
+    oldDropdownMenus.forEach((menu) => {
+      cloneAndReplace(menu);
+    });
+
+    // Re-query elements after cloning
+    const menuButton = root.querySelector("button[data-astronav]");
+    const dropdownMenus = root.querySelectorAll(".astronav-dropdown");
+
+    // Mobile nav toggle
+    if (menuButton) {
+      menuButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleMobileNav(root);
+      });
+
+      // Close menu on click (if enabled)
+      const closeOnClick = menuButton.getAttribute("data-closeOnClick");
+      if (closeOnClick) {
+        handleCloseOnClick(root);
+      }
+    }
+
+    // Dropdown menus
+    dropdownMenus.forEach((menu) => {
+      const button = menu.querySelector("button");
+      if (button) {
+        button.addEventListener("click", (event) =>
+          toggleDropdownMenu(event, menu, dropdownMenus)
+        );
+      }
+
+      // Handle Submenu Dropdowns
+      const dropDownSubmenus = menu.querySelectorAll(
+        ".astronav-dropdown-submenu"
       );
 
-    // Handle Submenu Dropdowns
-    const dropDownSubmenus = menu.querySelectorAll(
-      ".astronav-dropdown-submenu"
-    );
-
-    dropDownSubmenus.forEach((submenu) => {
-      const submenuButton = submenu.querySelector("button");
-      submenuButton &&
-        submenuButton.addEventListener("click", (event) => {
-          event.stopImmediatePropagation();
-          toggleSubmenuDropdown(event, submenu);
-        });
+      dropDownSubmenus.forEach((submenu) => {
+        const submenuButton = submenu.querySelector("button");
+        if (submenuButton) {
+          submenuButton.addEventListener("click", (event) => {
+            event.stopImmediatePropagation();
+            toggleSubmenuDropdown(event, submenu);
+          });
+        }
+      });
     });
-  });
+  }
 
   // Clicking away from dropdown will remove the dropdown class
   document.addEventListener("click", closeAllDropdowns);
 
-  if (closeOnClick) {
-    handleCloseOnClick();
-  }
-}
-
-function toggleMobileNav() {
-  [...document.querySelectorAll(".astronav-toggle")].forEach((el) => {
-    el.classList.toggle("hidden");
-  });
-}
-
-function toggleDropdownMenu(event, menu, dropdownMenus) {
-  toggleMenu(menu);
-
-  // Close one dropdown when selecting another
-  Array.from(dropdownMenus)
-    .filter((el) => el !== menu && !menu.contains(el))
-    .forEach(closeMenu);
-
-  event.stopPropagation();
-}
-
-function toggleSubmenuDropdown(event, submenu) {
-  event.stopPropagation();
-  toggleMenu(submenu);
-
-  // Close sibling submenus at the same nesting level
-  const siblingSubmenus = submenu
-    .closest(".astronav-dropdown")
-    .querySelectorAll(".astronav-dropdown-submenu");
-  Array.from(siblingSubmenus)
-    .filter((el) => el !== submenu && !submenu.contains(el))
-    .forEach(closeMenu);
-}
-
-function closeAllDropdowns(event) {
-  const dropdownMenus = document.querySelectorAll(".dropdown-toggle");
-  const dropdownParent = document.querySelectorAll(
-    ".astronav-dropdown, .astronav-dropdown-submenu"
-  );
-  const isButtonInsideDropdown = [
-    ...document.querySelectorAll(
-      `.astronav-dropdown button, .astronav-dropdown label, .astronav-dropdown input,
-	  .astronav-dropdown-submenu button, .astronav-dropdown-submenu label, .astronav-dropdown-submenu input,
-	  #astronav-menu`
-    ),
-  ].some((button) => button.contains(event.target));
-  if (!isButtonInsideDropdown) {
-    dropdownMenus.forEach((d) => {
-      // console.log("I ran", d);
-      // if (!d.contains(event.target)) {
-      d.classList.remove("open");
-      d.removeAttribute("open");
-      d.classList.add("hidden");
-      // }
-    });
-    dropdownParent.forEach((d) => {
-      d.classList.remove("open");
-      d.removeAttribute("open");
-      d.setAttribute("aria-expanded", "false");
+  function toggleMobileNav(root) {
+    root.querySelectorAll(".astronav-toggle").forEach((el) => {
+      el.classList.toggle("hidden");
     });
   }
-}
 
-function toggleMenu(menu) {
-  menu.classList.toggle("open");
-  const expanded = menu.getAttribute("aria-expanded") === "true";
-  menu.setAttribute("aria-expanded", expanded ? "false" : "true");
-  menu.hasAttribute("open")
-    ? menu.removeAttribute("open")
-    : menu.setAttribute("open", "");
+  function toggleDropdownMenu(event, menu, dropdownMenus) {
+    toggleMenu(menu);
 
-  const dropdownToggle = menu.querySelector(".dropdown-toggle");
-  const dropdownExpanded = dropdownToggle.getAttribute("aria-expanded");
-  dropdownToggle.classList.toggle("hidden");
-  dropdownToggle.setAttribute(
-    "aria-expanded",
-    dropdownExpanded === "true" ? "false" : "true"
-  );
-}
+    // Close one dropdown when selecting another
+    Array.from(dropdownMenus)
+      .filter((el) => el !== menu && !menu.contains(el))
+      .forEach(closeMenu);
 
-function closeMenu(menu) {
-  // console.log("closing", menu);
-  menu.classList.remove("open");
-  menu.removeAttribute("open");
-  menu.setAttribute("aria-expanded", "false");
-  const dropdownToggles = menu.querySelectorAll(".dropdown-toggle");
-  dropdownToggles.forEach((toggle) => {
-    toggle.classList.add("hidden");
-    toggle.setAttribute("aria-expanded", "false");
-  });
-}
+    event.stopPropagation();
+  }
 
-function handleCloseOnClick() {
-  const navMenuItems = document.querySelector(".astronav-items");
-  const navToggle = document.getElementById("astronav-menu");
-  const navLink = navMenuItems && navMenuItems.querySelectorAll("a");
+  function toggleSubmenuDropdown(event, submenu) {
+    event.stopPropagation();
+    toggleMenu(submenu);
 
-  const MenuIcons = navToggle.querySelectorAll(".astronav-toggle");
+    // Close sibling submenus at the same nesting level
+    const siblingSubmenus = submenu
+      .closest(".astronav-dropdown")
+      .querySelectorAll(".astronav-dropdown-submenu");
 
-  navLink &&
-    navLink.forEach((item) => {
-      item.addEventListener("click", () => {
-        navMenuItems?.classList.add("hidden");
-        MenuIcons.forEach((el) => {
-          el.classList.toggle("hidden");
+    Array.from(siblingSubmenus)
+      .filter((el) => el !== submenu && !submenu.contains(el))
+      .forEach(closeMenu);
+  }
+
+  function closeAllDropdowns(event) {
+    const dropdownMenus = document.querySelectorAll(".dropdown-toggle");
+    const dropdownParent = document.querySelectorAll(
+      ".astronav-dropdown, .astronav-dropdown-submenu"
+    );
+    const isButtonInsideDropdown = [
+      ...document.querySelectorAll(
+        `.astronav-dropdown button, .astronav-dropdown label, .astronav-dropdown input,
+      .astronav-dropdown-submenu button, .astronav-dropdown-submenu label, .astronav-dropdown-submenu input,
+      button[data-astronav]`
+      ),
+    ].some((button) => button.contains(event.target));
+
+    if (!isButtonInsideDropdown) {
+      dropdownMenus.forEach((d) => {
+        d.classList.remove("open");
+        d.removeAttribute("open");
+        d.classList.add("hidden");
+      });
+
+      dropdownParent.forEach((d) => {
+        d.classList.remove("open");
+        d.removeAttribute("open");
+        d.setAttribute("aria-expanded", "false");
+      });
+    }
+  }
+
+  function toggleMenu(menu) {
+    menu.classList.toggle("open");
+    const expanded = menu.getAttribute("aria-expanded") === "true";
+    menu.setAttribute("aria-expanded", expanded ? "false" : "true");
+    menu.hasAttribute("open")
+      ? menu.removeAttribute("open")
+      : menu.setAttribute("open", "");
+
+    const dropdownToggle = menu.querySelector(".dropdown-toggle");
+    const dropdownExpanded = dropdownToggle.getAttribute("aria-expanded");
+    dropdownToggle.classList.toggle("hidden");
+    dropdownToggle.setAttribute(
+      "aria-expanded",
+      dropdownExpanded === "true" ? "false" : "true"
+    );
+  }
+
+  function closeMenu(menu) {
+    menu.classList.remove("open");
+    menu.removeAttribute("open");
+    menu.setAttribute("aria-expanded", "false");
+    const dropdownToggles = menu.querySelectorAll(".dropdown-toggle");
+    dropdownToggles.forEach((toggle) => {
+      toggle.classList.add("hidden");
+      toggle.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function handleCloseOnClick(root) {
+    const navMenuItems = root.querySelector(".astronav-items");
+    const navLinks = navMenuItems && navMenuItems.querySelectorAll("a");
+
+    const MenuIcons = root.querySelectorAll(".astronav-toggle");
+
+    if (navLinks) {
+      navLinks.forEach((item) => {
+        item.addEventListener("click", () => {
+          navMenuItems?.classList.add("hidden");
+          MenuIcons.forEach((el) => {
+            el.classList.toggle("hidden");
+          });
         });
       });
-    });
-}
+    }
+  }
 </script>
+
+<style>
+  .astronav-toggle-root {
+    display: contents;
+  }
+</style>
